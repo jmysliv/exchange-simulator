@@ -1,3 +1,4 @@
+import 'package:exchange_simulator_flutter/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget{
@@ -14,7 +15,7 @@ class LoginScreen extends StatelessWidget{
         child: new SingleChildScrollView(
           child: Container(
             child: Padding(
-              padding: const EdgeInsets.all(36.0),
+              padding: const EdgeInsets.all(30.0),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -76,7 +77,7 @@ class LoginScreen extends StatelessWidget{
                     Material(
                       elevation: 5.0,
                       borderRadius: BorderRadius.circular(15.0),
-                      color: Colors.cyan,
+                      color: Colors.black,
                       child: MaterialButton(
                         minWidth: MediaQuery
                             .of(context)
@@ -84,7 +85,9 @@ class LoginScreen extends StatelessWidget{
                             .width,
                         padding: EdgeInsets.fromLTRB(
                             15.0, 10.0, 15.0, 10.0),
-                        onPressed: (){},
+                        onPressed: (){
+                          _formKey.currentState.validate();
+                        },
                         child: Text("Zaloguj",
                             textAlign: TextAlign.center,
                             style: TextStyle(
@@ -100,7 +103,7 @@ class LoginScreen extends StatelessWidget{
                     Material(
                       elevation: 5.0,
                       borderRadius: BorderRadius.circular(15.0),
-                      color: Colors.cyan,
+                      color: Colors.black,
                       child: MaterialButton(
                         minWidth: MediaQuery
                             .of(context)
@@ -108,7 +111,12 @@ class LoginScreen extends StatelessWidget{
                             .width,
                         padding: EdgeInsets.fromLTRB(
                             15.0, 10.0, 15.0, 10.0),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) {
+                                return RegisterScreen();
+                              }));
+                        },
                         child: Text("Załóż konto",
                             textAlign: TextAlign.center,
                             style: TextStyle(
