@@ -1,5 +1,9 @@
+import 'package:exchange_simulator_flutter/bloc/authentication.dart';
+import 'package:exchange_simulator_flutter/screens/loading_screen.dart';
 import 'package:exchange_simulator_flutter/screens/register_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:page_transition/page_transition.dart';
 
 class LoginScreen extends StatelessWidget{
   final TextEditingController _emailController = TextEditingController();
@@ -10,6 +14,25 @@ class LoginScreen extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    return BlocListener<AuthenticationBloc, AuthenticationState>(
+        listener: (context, state) {
+          if (state is Authenticated) {
+            Navigator.of(context).pushReplacementNamed("/home");
+          }
+        },
+        child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (context, state) {
+            if (state is Uninitialized)
+              return LoadingScreen("ładowanie danych");
+            else {
+              return loginForm(context);
+            }
+          },
+        )
+    );
+  }
+
+  Widget loginForm(BuildContext context){
     return Scaffold(
       body: Center(
         child: new SingleChildScrollView(
@@ -112,10 +135,7 @@ class LoginScreen extends StatelessWidget{
                         padding: EdgeInsets.fromLTRB(
                             15.0, 10.0, 15.0, 10.0),
                         onPressed: () {
-                          Navigator.of(context).push(
-                              MaterialPageRoute(builder: (context) {
-                                return RegisterScreen();
-                              }));
+                          Navigator.push(context, PageTransition(type: PageTransitionType.downToUp,child: RegisterScreen()));
                         },
                         child: Text("Załóż konto",
                             textAlign: TextAlign.center,
