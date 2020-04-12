@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:exchange_simulator_flutter/bloc/authentication.dart';
+import 'package:exchange_simulator_flutter/bloc/authentication/authentication.dart';
+import 'package:exchange_simulator_flutter/models/user_model.dart';
 import 'package:exchange_simulator_flutter/repositories/user_repository.dart';
 
 
@@ -11,13 +12,15 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState>{
   AuthenticationState get initialState => Uninitialized();
 
   @override
-  Stream<AuthenticationState> mapEventToState(AuthenticationEvent event,) async* {
+  Stream<AuthenticationState> mapEventToState(AuthenticationEvent event) async* {
     if (event is AppStarted) {
       yield* _mapAppStartedToState();
     } else if (event is LoggedIn) {
       yield* _mapLoggedInToState();
     } else if (event is LoggedOut) {
       yield* _mapLoggedOutToState();
+    } else if (event is ServerTimeout){
+      yield ServerNotResponding();
     }
   }
 
@@ -25,7 +28,8 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState>{
     try {
       final isSignedIn = await _userRepository.isSignedIn();
       if (isSignedIn) {
-        yield Authenticated();
+        User user = await _userRepository.fetchMe();
+        yield Authenticated(user);
       } else {
         yield Unauthenticated();
       }
@@ -36,7 +40,8 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState>{
 
   Stream<AuthenticationState> _mapLoggedInToState() async* {
     try{
-      yield Authenticated();
+      User user = await _userRepository.fetchMe();
+      yield Authenticated(user);
     } catch(_){
       yield Unauthenticated();
     }

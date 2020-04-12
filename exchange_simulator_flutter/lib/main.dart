@@ -1,4 +1,4 @@
-import 'package:exchange_simulator_flutter/bloc/authentication.dart';
+import 'package:exchange_simulator_flutter/bloc/authentication/authentication.dart';
 import 'package:exchange_simulator_flutter/bloc_delegate.dart';
 import 'package:exchange_simulator_flutter/repositories/user_repository.dart';
 import 'package:exchange_simulator_flutter/screens/home_screen.dart';
