@@ -1,4 +1,6 @@
 import 'package:exchange_simulator_flutter/bloc/authentication/authentication.dart';
+import 'package:exchange_simulator_flutter/bloc/login/login.dart';
+import 'package:exchange_simulator_flutter/repositories/user_repository.dart';
 import 'package:exchange_simulator_flutter/screens/loading_screen.dart';
 import 'package:exchange_simulator_flutter/screens/register_screen.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +11,9 @@ class LoginScreen extends StatelessWidget{
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final UserRepository _userRepository;
 
-  LoginScreen();
+  LoginScreen(this._userRepository);
 
   @override
   Widget build(BuildContext context) {
@@ -21,22 +24,71 @@ class LoginScreen extends StatelessWidget{
           }
         },
         child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-          builder: (context, state) {
+          builder: (buildContext, state) {
             if (state is Uninitialized){
               return LoadingScreen("ładowanie danych");
             } else if(state is ServerNotResponding){
               return LoadingScreen("Server chwilowo nie działa");
             } else {
-              return loginForm(context);
+              return Scaffold(
+                body: BlocProvider<LoginBloc>(
+                  create: (context) => LoginBloc(_userRepository),
+                  child: BlocListener<LoginBloc, LoginState>(
+                    listener: (context, state){
+                      if(state is LoginServerNotResponding){
+                        BlocProvider.of<AuthenticationBloc>(context).add(ServerTimeout());
+                      }
+                      else if (state is LoginFailed) {
+                        Scaffold.of(context)
+                          ..removeCurrentSnackBar()
+                          ..showSnackBar(
+                          SnackBar(
+                            content: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Podane dane są nieprawidłowe', style: TextStyle(color: Colors.white)),
+                                Icon(Icons.error)],
+                            ),
+                            backgroundColor: Colors.red,
+                            duration: Duration(seconds: 3),
+                          ),
+                        );
+                      }
+                      else if (state is LoginSucceed) {
+                        BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
+                      }
+                      else if(state is LoginLoading){
+                        Scaffold.of(context)
+                          ..removeCurrentSnackBar()
+                          ..showSnackBar(
+                          SnackBar(
+                            content: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Logowanie, prosze czekać', style: TextStyle(color: Colors.white)),
+                                CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.cyanAccent))
+                              ],
+                            ),
+                            backgroundColor: Colors.black,
+                            duration: Duration(seconds: 5),
+                        ));
+                      }
+                    },
+                    child: Builder(
+                      builder: (cxt){
+                        return loginForm(cxt);
+                      },
+                    )
+                ))
+            );
             }
           },
-        )
+        ),
     );
   }
 
   Widget loginForm(BuildContext context){
-    return Scaffold(
-      body: Center(
+    return Center(
         child: new SingleChildScrollView(
           child: Container(
             child: Padding(
@@ -111,7 +163,9 @@ class LoginScreen extends StatelessWidget{
                         padding: EdgeInsets.fromLTRB(
                             15.0, 10.0, 15.0, 10.0),
                         onPressed: (){
-                          _formKey.currentState.validate();
+                          if(_formKey.currentState.validate()){
+                            BlocProvider.of<LoginBloc>(context).add(LoginButtonPressed(_emailController.text, _passwordController.text));
+                          }
                         },
                         child: Text("Zaloguj",
                             textAlign: TextAlign.center,
@@ -157,7 +211,6 @@ class LoginScreen extends StatelessWidget{
             ),
           ),
         ),
-      )
     );
   }
 }

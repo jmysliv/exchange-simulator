@@ -13,7 +13,7 @@ void main(){
   BlocSupervisor.delegate = SimpleBlocDelegate();
   final UserRepository userRepository = UserRepository();
   runApp(
-      BlocProvider(
+      BlocProvider<AuthenticationBloc>(
         create: (context) => AuthenticationBloc(userRepository)..add(AppStarted()),
         child: MyApp(userRepository))
       );
@@ -29,10 +29,10 @@ class MyApp extends StatelessWidget {
       title: 'Currency Exchange Simulator',
       theme: ThemeData(
           brightness: Brightness.dark,
-          primarySwatch: Colors.cyan
+          primarySwatch: Colors.cyan,
       ),
       routes: {
-        "/login": (context) => LoginScreen(),
+        "/login": (context) => LoginScreen(_userRepository),
         "/home": (context) => HomeScreen()
       },
       initialRoute: "/login",

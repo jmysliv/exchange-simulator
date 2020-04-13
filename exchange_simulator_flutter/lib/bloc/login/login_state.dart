@@ -14,4 +14,4 @@ class LoginSucceed extends LoginState{}
 
 class LoginFailed extends LoginState{}
 
-class ServerNotResponding extends LoginState{}
+class LoginServerNotResponding extends LoginState{}

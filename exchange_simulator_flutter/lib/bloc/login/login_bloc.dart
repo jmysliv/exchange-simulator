@@ -18,7 +18,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState>{
         await _userRepository.login(event.email, event.password).timeout(Duration(seconds: 5));
         yield LoginSucceed();
       } catch( exception){
-        if(exception is TimeoutException) yield ServerNotResponding();
+        if(exception is TimeoutException) yield LoginServerNotResponding();
         else yield LoginFailed();
       }
     }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:exchange_simulator_flutter/bloc/authentication/authentication.dart';
 import 'package:exchange_simulator_flutter/models/user_model.dart';
@@ -28,22 +29,24 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState>{
     try {
       final isSignedIn = await _userRepository.isSignedIn();
       if (isSignedIn) {
-        User user = await _userRepository.fetchMe();
+        User user = await _userRepository.fetchMe().timeout(Duration(seconds: 5));
         yield Authenticated(user);
       } else {
         yield Unauthenticated();
       }
-    } catch (_) {
-      yield Unauthenticated();
+    } catch (e) {
+      if(e is TimeoutException) yield ServerNotResponding();
+      else yield Unauthenticated();
     }
   }
 
   Stream<AuthenticationState> _mapLoggedInToState() async* {
     try{
-      User user = await _userRepository.fetchMe();
+      User user = await _userRepository.fetchMe().timeout(Duration(seconds: 5));
       yield Authenticated(user);
-    } catch(_){
-      yield Unauthenticated();
+    } catch(e){
+      if(e is TimeoutException) yield ServerNotResponding();
+      else yield Unauthenticated();
     }
 
   }
