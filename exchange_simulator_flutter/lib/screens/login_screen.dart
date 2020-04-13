@@ -1,6 +1,7 @@
 import 'package:exchange_simulator_flutter/bloc/authentication/authentication.dart';
 import 'package:exchange_simulator_flutter/bloc/login/login.dart';
 import 'package:exchange_simulator_flutter/repositories/user_repository.dart';
+import 'package:exchange_simulator_flutter/screens/error_screen.dart';
 import 'package:exchange_simulator_flutter/screens/loading_screen.dart';
 import 'package:exchange_simulator_flutter/screens/register_screen.dart';
 import 'package:flutter/material.dart';
@@ -26,9 +27,10 @@ class LoginScreen extends StatelessWidget{
         child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (buildContext, state) {
             if (state is Uninitialized){
-              return LoadingScreen("ładowanie danych");
+              return LoadingScreen("Ładowanie pieniędzy na serwer...");
             } else if(state is ServerNotResponding){
-              return LoadingScreen("Server chwilowo nie działa");
+//              return ErrorScreen("Ups, serwer na razie nie odpowiada. Przepraszamy za niedogodności, już pracujemy nad rozwiązaniem!");
+              return LoadingScreen("Ładowanie pieniędzy na serwer...");
             } else {
               return Scaffold(
                 body: BlocProvider<LoginBloc>(
