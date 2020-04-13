@@ -191,7 +191,7 @@ class LoginScreen extends StatelessWidget{
                         padding: EdgeInsets.fromLTRB(
                             15.0, 10.0, 15.0, 10.0),
                         onPressed: () {
-                          Navigator.push(context, PageTransition(type: PageTransitionType.downToUp,child: RegisterScreen()));
+                          Navigator.push(context, PageTransition(type: PageTransitionType.downToUp,child: RegisterScreen(_userRepository)));
                         },
                         child: Text("Załóż konto",
                             textAlign: TextAlign.center,
