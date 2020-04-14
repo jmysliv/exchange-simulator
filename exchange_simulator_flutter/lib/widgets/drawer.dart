@@ -51,6 +51,20 @@ class HomeDrawer extends StatelessWidget{
           ListTile(
             title: Row(
               children: <Widget>[
+                Icon(Icons.score),
+                Padding(
+                  padding: EdgeInsets.only(left: 8.0),
+                  child: Text('Ranking'),
+                )
+              ],
+            ),
+            onTap: () {
+
+            },
+          ),
+          ListTile(
+            title: Row(
+              children: <Widget>[
                 Icon(Icons.account_balance_wallet),
                 Padding(
                   padding: EdgeInsets.only(left: 8.0),

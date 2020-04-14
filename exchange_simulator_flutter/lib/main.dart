@@ -25,17 +25,26 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Currency Exchange Simulator',
-      theme: ThemeData(
-          brightness: Brightness.dark,
-          primarySwatch: Colors.cyan,
-      ),
-      routes: {
-        "/login": (context) => LoginScreen(_userRepository),
-        "/home": (context) => HomeScreen()
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
       },
-      initialRoute: "/login",
+      child:MaterialApp(
+        title: 'Currency Exchange Simulator',
+        theme: ThemeData(
+            brightness: Brightness.dark,
+            primarySwatch: Colors.cyan,
+        ),
+        routes: {
+          "/login": (context) => LoginScreen(_userRepository),
+          "/home": (context) => HomeScreen()
+        },
+        initialRoute: "/login",
+      )
     );
   }
 }
