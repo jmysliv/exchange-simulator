@@ -38,32 +38,32 @@ class LoadingScreenState extends State<LoadingScreen> with TickerProviderStateMi
   @override
   void initState() {
     _coinController = AnimationController(vsync: this, duration:  Duration(milliseconds: 1500), );
-    _animatedCoin = Tween<double>(begin: -150, end: 300).animate(_coinController)..addListener(() => setState(() {}));
-    _opacity = Tween<double>(begin: 1.0, end: 0.0).animate(_coinController)..addListener(() => setState(() {}));
+    _animatedCoin = Tween<double>(begin: -150, end: 400).animate(_coinController)..addListener(() => setState(() {}));
+    _opacity = Tween<double>(begin: 1.0, end: 0.0).animate(CurvedAnimation(parent: _coinController, curve: Curves.easeInExpo))..addListener(() => setState(() {}));
     _coinController.forward();
     _coinController.repeat();
 
     _coinController1 = AnimationController(vsync: this, duration:  Duration(milliseconds: 2000), );
-    _animatedCoin1 = Tween<double>(begin: -50, end: 300).animate(_coinController1)..addListener(() => setState(() {}));
-    _opacity1 = Tween<double>(begin: 1.0, end: 0.0).animate(_coinController1)..addListener(() => setState(() {}));
+    _animatedCoin1 = Tween<double>(begin: -50, end: 400).animate(_coinController1)..addListener(() => setState(() {}));
+    _opacity1 = Tween<double>(begin: 1.0, end: 0.0).animate(CurvedAnimation(parent: _coinController1, curve: Curves.easeInExpo))..addListener(() => setState(() {}));
     _coinController1.forward();
     _coinController1.repeat();
 
     _coinController2 = AnimationController(vsync: this, duration:  Duration(milliseconds: 2300), );
-    _animatedCoin2 = Tween<double>(begin: -100, end: 300).animate(_coinController2)..addListener(() => setState(() {}));
-    _opacity2 = Tween<double>(begin: 1.0, end: 0.0).animate(_coinController2)..addListener(() => setState(() {}));
+    _animatedCoin2 = Tween<double>(begin: -100, end: 400).animate(_coinController2)..addListener(() => setState(() {}));
+    _opacity2 = Tween<double>(begin: 1.0, end: 0.0).animate(CurvedAnimation(parent: _coinController2, curve: Curves.easeInExpo))..addListener(() => setState(() {}));
     _coinController2.forward();
     _coinController2.repeat();
 
     _coinController3 = AnimationController(vsync: this, duration:  Duration(milliseconds: 1700), );
-    _animatedCoin3 = Tween<double>(begin: -150, end: 300).animate(_coinController3)..addListener(() => setState(() {}));
-    _opacity3 = Tween<double>(begin: 1.0, end: 0.0).animate(_coinController3)..addListener(() => setState(() {}));
+    _animatedCoin3 = Tween<double>(begin: -150, end: 400).animate(_coinController3)..addListener(() => setState(() {}));
+    _opacity3 = Tween<double>(begin: 1.0, end: 0.0).animate(CurvedAnimation(parent: _coinController3, curve: Curves.easeInExpo))..addListener(() => setState(() {}));
     _coinController3.forward();
     _coinController3.repeat();
 
     _dollarController = AnimationController(vsync: this, duration:  Duration(milliseconds: 2500), );
-    _animatedDollar = Tween<double>(begin: -200, end: 300).animate(_dollarController)..addListener(() => setState(() {}));
-    _opacity4 = Tween<double>(begin: 1.0, end: 0.0).animate(_dollarController)..addListener(() => setState(() {}));
+    _animatedDollar = Tween<double>(begin: -200, end: 400).animate(_dollarController)..addListener(() => setState(() {}));
+    _opacity4 = Tween<double>(begin: 1.0, end: 0.0).animate(CurvedAnimation(parent: _dollarController, curve: Curves.easeInExpo))..addListener(() => setState(() {}));
     _dollarController.forward();
     _dollarController.repeat();
 
@@ -74,14 +74,19 @@ class LoadingScreenState extends State<LoadingScreen> with TickerProviderStateMi
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-          color: Colors.transparent,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/images/loading.jpg"),
+              fit: BoxFit.cover,
+            ),
+          ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 30.0),
+            padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
             child: Column(
               children: <Widget>[
                 Stack(
                   children: <Widget>[
-                    Container(height: 400,),
+                    Container(height: MediaQuery.of(context).size.height * 0.85,),
                     Positioned(
                         top: _animatedCoin.value,
                         right: 100,
@@ -129,7 +134,10 @@ class LoadingScreenState extends State<LoadingScreen> with TickerProviderStateMi
                     )
                   ],
                 ),
-                Text(message, style: TextStyle(color: Colors.white, fontSize: 20), textAlign: TextAlign.center,)
+                Text(message, style: TextStyle( fontSize: 32, foreground: Paint()
+                  ..style = PaintingStyle.stroke
+                  ..strokeWidth = 3
+                  ..color = Colors.redAccent), textAlign: TextAlign.center,)
               ],
             )
         )

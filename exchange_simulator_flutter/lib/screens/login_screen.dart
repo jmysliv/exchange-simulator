@@ -29,8 +29,7 @@ class LoginScreen extends StatelessWidget{
             if (state is Uninitialized){
               return LoadingScreen("Ładowanie pieniędzy na serwer...");
             } else if(state is ServerNotResponding){
-//              return ErrorScreen("Ups, serwer na razie nie odpowiada. Przepraszamy za niedogodności, już pracujemy nad rozwiązaniem!");
-              return LoadingScreen("Ładowanie pieniędzy na serwer...");
+              return ErrorScreen("Ups, serwer na razie nie odpowiada. Przepraszamy za niedogodności, już pracujemy nad rozwiązaniem!");
             } else {
               return Scaffold(
                 body: BlocProvider<LoginBloc>(

@@ -30,13 +30,18 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState>{
       final isSignedIn = await _userRepository.isSignedIn();
       if (isSignedIn) {
         User user = await _userRepository.fetchMe().timeout(Duration(seconds: 5));
+        await Future.delayed(Duration(seconds: 3));
         yield Authenticated(user);
       } else {
+        await Future.delayed(Duration(seconds: 3));
         yield Unauthenticated();
       }
     } catch (e) {
       if(e is TimeoutException) yield ServerNotResponding();
-      else yield Unauthenticated();
+      else{
+        await Future.delayed(Duration(seconds: 3));
+        yield Unauthenticated();
+      }
     }
   }
 
