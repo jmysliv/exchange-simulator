@@ -47,7 +47,7 @@ class HomeDrawer extends StatelessWidget{
               ],
             ),
             onTap: () {
-              CurrencyRepository(UserRepository.getInstance()).fetchCurrencies();
+              Navigator.popAndPushNamed(context, "/currencies");
             },
           ),
           ListTile(

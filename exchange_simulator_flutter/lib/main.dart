@@ -1,6 +1,7 @@
 import 'package:exchange_simulator_flutter/bloc/authentication/authentication.dart';
 import 'package:exchange_simulator_flutter/bloc_delegate.dart';
 import 'package:exchange_simulator_flutter/repositories/user_repository.dart';
+import 'package:exchange_simulator_flutter/screens/currencies_screen.dart';
 import 'package:exchange_simulator_flutter/screens/home_screen.dart';
 import 'package:exchange_simulator_flutter/screens/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +41,8 @@ class MyApp extends StatelessWidget {
         ),
         routes: {
           "/login": (context) => LoginScreen(),
-          "/home": (context) => HomeScreen()
+          "/home": (context) => HomeScreen(),
+          "/currencies": (context) => CurrenciesScreen()
         },
         initialRoute: "/login",
       )

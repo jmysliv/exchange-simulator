@@ -11,7 +11,7 @@ class User{
   User.fromJson(Map<String, dynamic> json)
     : this.name = json['name'],
       this.email = json['email'],
-      this.id = json['_id'],
+      this.id = json['id'],
       this.amountOfPLN = json['amountOfPLN'];
 
   String toJson() =>
