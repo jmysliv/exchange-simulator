@@ -7,8 +7,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserRepository{
   String _token;
   static const url = "http://192.168.43.53:7000";
-  UserRepository(){
+  UserRepository._constructor(){
     this._token = null;
+  }
+  static UserRepository _instance;
+  static UserRepository getInstance(){
+    if(_instance == null){
+      _instance = UserRepository._constructor();
+    }
+    return _instance;
   }
 
   Map<String, String> setUpHeaders(){

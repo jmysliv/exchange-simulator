@@ -12,9 +12,8 @@ class LoginScreen extends StatelessWidget{
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final UserRepository _userRepository;
 
-  LoginScreen(this._userRepository);
+  LoginScreen();
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +32,7 @@ class LoginScreen extends StatelessWidget{
             } else {
               return Scaffold(
                 body: BlocProvider<LoginBloc>(
-                  create: (context) => LoginBloc(_userRepository),
+                  create: (context) => LoginBloc(UserRepository.getInstance()),
                   child: BlocListener<LoginBloc, LoginState>(
                     listener: (context, state){
                       if(state is LoginServerNotResponding){
@@ -192,7 +191,7 @@ class LoginScreen extends StatelessWidget{
                         padding: EdgeInsets.fromLTRB(
                             15.0, 10.0, 15.0, 10.0),
                         onPressed: () {
-                          Navigator.push(context, PageTransition(type: PageTransitionType.downToUp,child: RegisterScreen(_userRepository)));
+                          Navigator.push(context, PageTransition(type: PageTransitionType.downToUp,child: RegisterScreen()));
                         },
                         child: Text("Załóż konto",
                             textAlign: TextAlign.center,

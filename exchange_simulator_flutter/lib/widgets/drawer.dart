@@ -1,3 +1,5 @@
+import 'package:exchange_simulator_flutter/repositories/currency_repository.dart';
+import 'package:exchange_simulator_flutter/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:exchange_simulator_flutter/bloc/authentication/authentication.dart';
@@ -45,7 +47,7 @@ class HomeDrawer extends StatelessWidget{
               ],
             ),
             onTap: () {
-
+              CurrencyRepository(UserRepository.getInstance()).fetchCurrencies();
             },
           ),
           ListTile(

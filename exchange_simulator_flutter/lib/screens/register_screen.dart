@@ -10,9 +10,8 @@ class RegisterScreen extends StatelessWidget{
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _repeatPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final UserRepository _userRepository;
 
-  RegisterScreen(this._userRepository);
+  RegisterScreen();
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +19,7 @@ class RegisterScreen extends StatelessWidget{
         appBar: AppBar(
             title: Text('Załóż konto')),
         body: BlocProvider<RegisterBloc>(
-          create: (context) => RegisterBloc(_userRepository),
+          create: (context) => RegisterBloc(UserRepository.getInstance()),
           child: BlocListener<RegisterBloc, RegisterState>(
             listener: (context, state){
               if(state is RegisterServerNotResponding){

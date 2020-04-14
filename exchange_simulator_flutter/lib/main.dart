@@ -11,17 +11,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 void main(){
   WidgetsFlutterBinding.ensureInitialized();
   BlocSupervisor.delegate = SimpleBlocDelegate();
-  final UserRepository userRepository = UserRepository();
   runApp(
       BlocProvider<AuthenticationBloc>(
-        create: (context) => AuthenticationBloc(userRepository)..add(AppStarted()),
-        child: MyApp(userRepository))
+        create: (context) => AuthenticationBloc(UserRepository.getInstance())..add(AppStarted()),
+        child: MyApp())
       );
 }
 
 class MyApp extends StatelessWidget {
-  final UserRepository _userRepository;
-  MyApp(this._userRepository);
+
+  MyApp();
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.cyan,
         ),
         routes: {
-          "/login": (context) => LoginScreen(_userRepository),
+          "/login": (context) => LoginScreen(),
           "/home": (context) => HomeScreen()
         },
         initialRoute: "/login",
