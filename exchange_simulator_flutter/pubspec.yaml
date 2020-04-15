@@ -23,6 +23,7 @@ dependencies:
   shared_preferences: ^0.5.6+3
   equatable: ^1.1.0
   page_transition: ^1.1.5
+  currency_icons: ^0.0.2
   flutter:
     sdk: flutter
 
