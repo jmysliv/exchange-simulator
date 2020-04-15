@@ -15,7 +15,7 @@ class CurrencyBloc extends Bloc<CurrencyEvent, CurrencyState>{
   @override
   Stream<CurrencyState> mapEventToState(CurrencyEvent event) async* {
     if(event is FetchCurrency){
-      yield CurrencyLoading();
+      yield CurrencyLoading(event.oldCurrencies);
       try{
         List<Currency> currencies = await _currencyRepository.fetchCurrencies().timeout(Duration(seconds: 5));
         if(event.name != null){

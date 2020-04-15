@@ -13,7 +13,6 @@ class CurrencyRepository{
     final response = await http.get(url + "/currencies", headers: userRepository.setUpHeaders());
     if(response.statusCode == 200){
       List<Currency> currencies = (jsonDecode(response.body) as List).map((currency) => Currency.fromJson(currency)).toList();
-      print(currencies);
       return currencies;
     }else{
       throw Exception("Failed to fetch currencies");

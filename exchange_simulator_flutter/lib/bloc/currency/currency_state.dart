@@ -9,7 +9,17 @@ abstract class CurrencyState extends Equatable{
 
 class CurrencyInitial extends CurrencyState{}
 
-class CurrencyLoading extends CurrencyState{}
+class CurrencyLoading extends CurrencyState{
+  final List<Currency> oldCurrencies;
+
+  CurrencyLoading(this.oldCurrencies);
+
+  @override
+  List<Object> get props => [oldCurrencies];
+
+  @override
+  String toString() => 'CurrencyLoading:  $oldCurrencies';
+}
 
 class CurrencyFetched extends CurrencyState{
   final List<Currency> currencies;
