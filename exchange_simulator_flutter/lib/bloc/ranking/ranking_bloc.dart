@@ -16,7 +16,7 @@ class RankingBloc extends Bloc<RankingEvent, RankingState>{
     if(event is InitRanking){
       try{
         List<User> users = await _userRepository.fetchUsers().timeout(Duration(seconds: 5));
-        users.sort((User a, User b) => a.amountOfPLN.compareTo(b.amountOfPLN));
+        users.sort((User a, User b) => b.amountOfPLN.compareTo(a.amountOfPLN));
         await Future.delayed(Duration(seconds: 3));
         yield RankingFetched(users);
       } catch( exception){
@@ -30,7 +30,7 @@ class RankingBloc extends Bloc<RankingEvent, RankingState>{
       try{
         yield RankingLoading(event.oldUsers);
         List<User> users = await _userRepository.fetchUsers().timeout(Duration(seconds: 5));
-        users.sort((User a, User b) => a.amountOfPLN.compareTo(b.amountOfPLN));
+        users.sort((User a, User b) => b.amountOfPLN.compareTo(a.amountOfPLN));
         yield RankingFetched(users);
       } catch( exception){
         if(exception is TimeoutException) yield RankingError("Ups, serwer na razie nie odpowiada. Przepraszamy za niedogodności, już pracujemy nad rozwiązaniem!");

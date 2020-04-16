@@ -5,6 +5,7 @@ import 'package:exchange_simulator_flutter/screens/currencies_screen.dart';
 import 'package:exchange_simulator_flutter/screens/home_screen.dart';
 import 'package:exchange_simulator_flutter/screens/login_screen.dart';
 import 'package:exchange_simulator_flutter/screens/myprofile_screen.dart';
+import 'package:exchange_simulator_flutter/screens/ranking_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,7 +45,8 @@ class MyApp extends StatelessWidget {
           "/login": (context) => LoginScreen(),
           "/home": (context) => HomeScreen(),
           "/currencies": (context) => CurrenciesScreen(),
-          "/my-profile": (context) => MyProfileScreen()
+          "/my-profile": (context) => MyProfileScreen(),
+          "/ranking": (context) => RankingScreen()
         },
         initialRoute: "/login",
       )

@@ -59,7 +59,7 @@ class HomeDrawer extends StatelessWidget{
               ],
             ),
             onTap: () {
-
+              Navigator.popAndPushNamed(context, "/ranking");
             },
           ),
           ListTile(
@@ -101,6 +101,7 @@ class HomeDrawer extends StatelessWidget{
             ),
             onTap: () {
               BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut());
+              Navigator.of(context).popUntil((route) => route.isFirst);
               Navigator.of(context).pushReplacementNamed("/login");
             },
           ),
