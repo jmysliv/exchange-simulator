@@ -75,7 +75,7 @@ class HomeDrawer extends StatelessWidget{
               ],
             ),
             onTap: () {
-              BetRepository(UserRepository.getInstance()).fetchBets();
+              Navigator.popAndPushNamed(context, "/bets");
             },
           ),
           ListTile(
