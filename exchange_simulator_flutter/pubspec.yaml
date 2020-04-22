@@ -24,6 +24,7 @@ dependencies:
   equatable: ^1.1.0
   page_transition: ^1.1.5
   currency_icons: ^0.0.2
+  intl: ^0.16.1
   flutter:
     sdk: flutter
 
