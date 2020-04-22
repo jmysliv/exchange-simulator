@@ -28,7 +28,6 @@ class BetRepository{
     final response = await http.get(url + "/bets", headers: _userRepository.setUpHeaders());
     if(response.statusCode == 200){
       List<Bet> bets = (jsonDecode(response.body) as List).map((bet) => Bet.fromJson(bet)).toList();
-      print(bets);
       return bets;
     }else{
       throw Exception("Failed to fetch bets");

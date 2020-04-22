@@ -2,6 +2,7 @@ import 'package:exchange_simulator_flutter/bloc/bet/bet.dart';
 import 'package:exchange_simulator_flutter/models/bet_filters.dart';
 import 'package:exchange_simulator_flutter/models/bet_model.dart';
 import 'package:exchange_simulator_flutter/repositories/bet_repository.dart';
+import 'package:exchange_simulator_flutter/repositories/currency_repository.dart';
 import 'package:exchange_simulator_flutter/repositories/user_repository.dart';
 import 'package:exchange_simulator_flutter/screens/error_screen.dart';
 import 'package:exchange_simulator_flutter/screens/loading_screen.dart';
@@ -22,7 +23,7 @@ class BetScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<BetBloc>(
         create: (context) =>
-        BetBloc(_betRepository)..add(InitBet()),
+        BetBloc(_betRepository, CurrencyRepository(UserRepository.getInstance()))..add(InitBet()),
         child: BlocBuilder<BetBloc, BetState>(
             builder: (buildContext, state) {
               if (state is BetInitial)
@@ -108,7 +109,47 @@ class _BetsListState extends State<BetsList>{
                         itemCount: _filteredBets.length,
                         itemBuilder: (context, index) {
                           if(_filteredBets[index].soldDate == null){
-                            return activeBetCard(context, _filteredBets[index]);
+                            return Dismissible(
+                              key: ValueKey(_filteredBets[index]),
+                              background: Container(
+                                color: Colors.green,
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                alignment: AlignmentDirectional.centerStart,
+                                child: Row(
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.attach_money,
+                                      color: Colors.white,
+                                      size: 30,
+                                    ),
+                                    Text("SPRZEDAJ", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),),
+                                  ],
+                                )
+                              ),
+                              secondaryBackground: Container(
+                                  color: Colors.green,
+                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  alignment: AlignmentDirectional.centerEnd,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.attach_money,
+                                        color: Colors.white,
+                                        size: 30,
+                                      ),
+                                      Text("SPRZEDAJ", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),),
+                                    ],
+                                  )
+                              ),
+                              onDismissed: (direction){
+                                setState(() {
+                                  _filteredBets = _filteredBets.where((bet) => bet.id != _filteredBets[index].id).toList();
+                                });
+                                BlocProvider.of<BetBloc>(context).add(SellBet(_filteredBets[index].id, widget.bets));
+                              },
+                              child: activeBetCard(context, _filteredBets[index]),
+                            );
                           } else{
                             return soldBetCard(context, _filteredBets[index]);
                           }
@@ -276,7 +317,7 @@ class _BetsListState extends State<BetsList>{
                 flex: 1,
                 child:  Column(
                   children: <Widget>[
-                    Text("${bet.amountObtainedPLN} PLN",
+                    Text("${bet.potentialObtained} PLN",
                       style: TextStyle(color: Colors.white, fontSize: 15,), textAlign: TextAlign.center,),
                     Text("przy obecnym kursie",style: TextStyle(color: Colors.white, fontStyle: FontStyle.italic, fontSize: 8))
                   ],

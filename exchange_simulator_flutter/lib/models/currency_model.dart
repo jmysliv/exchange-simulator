@@ -34,6 +34,11 @@ class Currency{
     }
   }
 
+  double getCurrentExchangeRate(){
+    this.timestamps.sort((Timestamp a, Timestamp b) => b.date.compareTo(a.date));
+    return this.timestamps[0].exchangeRate;
+  }
+
   @override
   String toString() => '{ id: $id, name: $name, symbol: $symbol, timestamps: $timestamps}';
 }

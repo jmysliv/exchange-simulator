@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:exchange_simulator_flutter/models/currency_model.dart';
+
 class Bet {
   String id;
   String currencyId;
@@ -10,6 +12,7 @@ class Bet {
   DateTime soldDate;
   double amountInvestedPLN;
   double amountObtainedPLN;
+  double potentialObtained = 0.0;
 
   Bet(this.id, this.currencyId, this.userId, this.currencySymbol, this.amountOfCurrency, this.purchaseDate, this.soldDate, this.amountInvestedPLN, this.amountObtainedPLN);
 
@@ -23,6 +26,16 @@ class Bet {
     soldDate = (json['soldDate'] == null) ? null : DateTime.parse(json['soldDate']);
     amountInvestedPLN = json['amountInvestedPLN'];
     amountObtainedPLN = (json['amountObtainedPLN'] == "NaN") ? 0 : json['amountObtainedPLN'];
+  }
+
+  void calculatePotentialOutcome(List<Currency> currencies){
+    if(this.soldDate != null) return;
+    for(Currency currency in currencies){
+      if(currency.id == this.currencyId){
+        potentialObtained = this.amountOfCurrency * currency.getCurrentExchangeRate();
+        return;
+      }
+    }
   }
 
   @override
