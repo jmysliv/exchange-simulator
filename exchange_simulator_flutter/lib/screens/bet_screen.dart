@@ -1,4 +1,5 @@
 import 'package:exchange_simulator_flutter/bloc/bet/bet.dart';
+import 'package:exchange_simulator_flutter/models/bet_filters.dart';
 import 'package:exchange_simulator_flutter/models/bet_model.dart';
 import 'package:exchange_simulator_flutter/repositories/bet_repository.dart';
 import 'package:exchange_simulator_flutter/repositories/user_repository.dart';
@@ -49,11 +50,17 @@ class BetsList extends StatefulWidget {
 
 class _BetsListState extends State<BetsList>{
   List<Bet> _filteredBets;
+  BetFilter _activeFilter;
+  BetSorting _activeSorting;
+
 
   @override
   void initState() {
     super.initState();
     _filteredBets = widget.bets;
+    _filteredBets.sort((Bet a, Bet b) => a.purchaseDate.compareTo(b.purchaseDate));
+    _activeFilter = BetFilter.all;
+    _activeSorting = BetSorting.date;
   }
 
   @override
@@ -64,9 +71,7 @@ class _BetsListState extends State<BetsList>{
   @override
   Widget build(BuildContext context){
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Moje Inwestycje"),
-        ),
+        appBar: appBarWithFilters(context),
         drawer: HomeDrawer(),
         body: RefreshIndicator(
           onRefresh: (){
@@ -115,6 +120,79 @@ class _BetsListState extends State<BetsList>{
     );
   }
 
+  Widget appBarWithFilters(BuildContext context){
+    final activeStyle = Theme.of(context).textTheme.body1.copyWith(color: Theme.of(context).accentColor);
+    final defaultStyle = Theme.of(context).textTheme.body1;
+    return  AppBar(
+        title: Text('Moje Inwestycje'),
+        actions: [
+          PopupMenuButton<BetFilter>(
+            onSelected: (filter) {
+              setState(() {
+                _activeFilter = filter;
+                applyFilterAndSorting();
+              });
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuItem<BetFilter>>[
+              PopupMenuItem<BetFilter>(
+                value: BetFilter.all,
+                child: Text("Pokaż wszystkie", style: _activeFilter == BetFilter.all ? activeStyle : defaultStyle),
+              ),
+              PopupMenuItem<BetFilter>(
+                value: BetFilter.active,
+                child: Text("Pokaż aktywne", style: _activeFilter == BetFilter.active ? activeStyle : defaultStyle),
+              ),
+              PopupMenuItem<BetFilter>(
+                value: BetFilter.past,
+                child: Text("Pokaż zakończone", style: _activeFilter == BetFilter.past ? activeStyle : defaultStyle),
+              ),
+            ],
+            icon: Icon(Icons.filter_list),
+          ),
+          PopupMenuButton<BetSorting>(
+            onSelected: (sorting){
+              setState(() {
+                _activeSorting = sorting;
+                applyFilterAndSorting();
+              });
+
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuItem<BetSorting>>[
+              PopupMenuItem<BetSorting>(
+                value: BetSorting.date,
+                child: Text("Sortuj po dacie zakupu", style: _activeSorting == BetSorting.date ? activeStyle : defaultStyle),
+              ),
+              PopupMenuItem<BetSorting>(
+                value: BetSorting.profit,
+                child: Text("Sortuj po zysku", style: _activeSorting == BetSorting.profit ? activeStyle : defaultStyle),
+              ),
+              PopupMenuItem<BetSorting>(
+                value: BetSorting.amount,
+                child: Text("Sortuj po zainwestowanej kwocie", style: _activeSorting == BetSorting.amount ? activeStyle : defaultStyle),
+              ),
+            ],
+          ),
+        ]
+    );
+  }
+
+  List<Bet> applyFilterAndSorting(){
+    _filteredBets = widget.bets;
+    if(_activeFilter == BetFilter.active){
+      _filteredBets = _filteredBets.where( (bet) => bet.soldDate == null).toList();
+    } else if(_activeFilter == BetFilter.past){
+      _filteredBets = _filteredBets.where( (bet) => bet.soldDate != null).toList();
+    }
+
+    if(_activeSorting == BetSorting.date){
+      _filteredBets.sort((Bet a, Bet b) => a.purchaseDate.compareTo(b.purchaseDate));
+    } else if(_activeSorting == BetSorting.amount){
+      _filteredBets.sort((Bet a, Bet b) => b.amountInvestedPLN.compareTo(a.amountInvestedPLN));
+    } else{
+      _filteredBets.sort((Bet a, Bet b) => (b.amountObtainedPLN - b.amountInvestedPLN).compareTo((a.amountObtainedPLN - a.amountInvestedPLN)));
+    }
+  }
+
   Widget soldBetCard(BuildContext context, Bet bet){
     return  Card(
       elevation: 8.0,
@@ -158,7 +236,8 @@ class _BetsListState extends State<BetsList>{
           subtitle: Container(
             margin: EdgeInsets.only(top: 5),
             child: Text("Zysk: ${(bet.amountObtainedPLN - bet.amountInvestedPLN).roundToDouble()}PLN",
-              style: TextStyle(color: Colors.white, fontStyle: FontStyle.italic, fontSize: 10,), textAlign: TextAlign.center,)
+              style: TextStyle(color: ((bet.amountObtainedPLN - bet.amountInvestedPLN) > 0) ? Colors.green : Colors.red,
+                fontStyle: FontStyle.italic, fontSize: 10,), textAlign: TextAlign.center,)
           ),
           onTap: () {},
         ),

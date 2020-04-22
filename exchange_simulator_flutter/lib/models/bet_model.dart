@@ -22,7 +22,7 @@ class Bet {
     purchaseDate = DateTime.parse(json['purchaseDate']);
     soldDate = (json['soldDate'] == null) ? null : DateTime.parse(json['soldDate']);
     amountInvestedPLN = json['amountInvestedPLN'];
-    amountObtainedPLN = (json['amountObtainedPLN'] == "NaN") ? null : json['amountObtainedPLN'];
+    amountObtainedPLN = (json['amountObtainedPLN'] == "NaN") ? 0 : json['amountObtainedPLN'];
   }
 
   @override
