@@ -2,11 +2,13 @@ import 'package:exchange_simulator_flutter/bloc/currency/currency.dart';
 import 'package:exchange_simulator_flutter/models/currency_model.dart';
 import 'package:exchange_simulator_flutter/repositories/currency_repository.dart';
 import 'package:exchange_simulator_flutter/repositories/user_repository.dart';
+import 'package:exchange_simulator_flutter/screens/currency_details_screen.dart';
 import 'package:exchange_simulator_flutter/screens/error_screen.dart';
 import 'package:exchange_simulator_flutter/screens/loading_screen.dart';
 import 'package:exchange_simulator_flutter/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:page_transition/page_transition.dart';
 
 class CurrenciesScreen extends StatelessWidget {
   final CurrencyRepository _currencyRepository;
@@ -155,7 +157,9 @@ class _CurrenciesListState extends State<CurrenciesList>{
 
           subtitle: Text(currency.symbol,  style: TextStyle(color: Colors.white)),
           trailing: Icon(Icons.arrow_forward_ios),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(context, PageTransition(type: PageTransitionType.downToUp,child: CurrencyDetailScreen(currency.id)));
+          },
         ),
       ),
     );
