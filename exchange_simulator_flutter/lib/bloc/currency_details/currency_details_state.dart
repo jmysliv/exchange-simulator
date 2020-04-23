@@ -12,11 +12,12 @@ class CurrencyDetailInitial extends CurrencyDetailState{}
 
 class CurrencyDetailLoading extends CurrencyDetailState{
   final Currency currency;
+  final double amountOfPLN;
 
-  CurrencyDetailLoading(this.currency);
+  CurrencyDetailLoading(this.currency, this.amountOfPLN);
 
   @override
-  List<Object> get props => [currency];
+  List<Object> get props => [currency, amountOfPLN];
 
   @override
   String toString() => 'CurrencyDetailLoading:  $currency';
@@ -25,35 +26,25 @@ class CurrencyDetailLoading extends CurrencyDetailState{
 
 class CurrencyDetailFetched extends CurrencyDetailState {
   final Currency currency;
+  final double amountOfPLN;
 
-  CurrencyDetailFetched(this.currency);
+  CurrencyDetailFetched(this.currency, this.amountOfPLN);
 
   @override
-  List<Object> get props => [currency];
+  List<Object> get props => [currency, amountOfPLN];
 
   @override
   String toString() => 'CurrencyDetailFetched:  $currency';
 }
 
-class NotEnoughMoney extends CurrencyDetailState{
-  final Currency currency;
-
-  NotEnoughMoney(this.currency);
-
-  @override
-  List<Object> get props => [currency];
-
-  @override
-  String toString() => 'NotEnoughMoney:  $currency';
-}
-
 class CurrencyBought extends CurrencyDetailState{
   final Currency currency;
+  final double amountOfPLN;
 
-  CurrencyBought(this.currency);
+  CurrencyBought(this.currency, this.amountOfPLN);
 
   @override
-  List<Object> get props => [currency];
+  List<Object> get props => [currency, amountOfPLN];
 
   @override
   String toString() => 'CurrencyBught:  $currency';

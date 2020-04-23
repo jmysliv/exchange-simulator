@@ -1,1 +1,0 @@
-class NotEnoughMoneyException implements Exception{}

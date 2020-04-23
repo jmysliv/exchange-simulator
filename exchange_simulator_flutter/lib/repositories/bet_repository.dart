@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:exchange_simulator_flutter/models/bet_model.dart';
-import 'package:exchange_simulator_flutter/models/exceptions.dart';
 import 'package:exchange_simulator_flutter/repositories/user_repository.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,7 +16,7 @@ class BetRepository{
     if(response.statusCode == 200){
       return;
     } else if(response.statusCode == 409){
-      throw NotEnoughMoneyException();
+      throw Exception("Użytkownik nie posiada wystarczająco pieniędzy na tą inwestycje");
     } else if(response.statusCode == 400){
       throw Exception(jsonDecode(response.body)['message']);
     } else{

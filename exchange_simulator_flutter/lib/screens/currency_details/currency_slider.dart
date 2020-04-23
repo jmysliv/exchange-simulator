@@ -1,9 +1,12 @@
 import 'package:exchange_simulator_flutter/models/currency_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:exchange_simulator_flutter/bloc/currency_details/currency_detail.dart';
 
 class CurrencySlider extends StatefulWidget{
   final Currency currency;
-  CurrencySlider(this.currency);
+  final double amount;
+  CurrencySlider(this.currency, this.amount);
 
   State<CurrencySlider> createState() => CurrencySliderState();
 }
@@ -52,7 +55,7 @@ class CurrencySliderState extends State<CurrencySlider>{
               child: Slider(
                 value: _value,
                 min: 0,
-                max: 100,
+                max: widget.amount,
                 label: '${_value.roundToDouble()}',
                 onChanged: (value) {
                   setState(
@@ -61,7 +64,7 @@ class CurrencySliderState extends State<CurrencySlider>{
                     },
                   );
                 },
-                divisions: 100,
+                divisions: (widget.amount.round() > 0) ? widget.amount.round() : 1,
               ),
             ),
             Padding(
@@ -83,7 +86,11 @@ class CurrencySliderState extends State<CurrencySlider>{
       padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 80),
       highlightColor: Colors.cyan,
       shape: Border.all(width: 2.0, color: Colors.cyan),
-      onPressed: (){},
+      onPressed: (){
+        if(_value > 0){
+          BlocProvider.of<CurrencyDetailBloc>(context).add(BuyCurrency(widget.currency, _value, widget.amount));
+        }
+      },
     );
   }
 

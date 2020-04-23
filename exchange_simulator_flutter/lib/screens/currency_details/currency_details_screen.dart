@@ -23,7 +23,7 @@ class CurrencyDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<CurrencyDetailBloc>(
         create: (context) =>
-        CurrencyDetailBloc(_betRepository, _currencyRepository)..add(InitCurrencyDetail(id)),
+        CurrencyDetailBloc(_betRepository, _currencyRepository, UserRepository.getInstance())..add(InitCurrencyDetail(id)),
         child: BlocBuilder<CurrencyDetailBloc, CurrencyDetailState>(
             builder: (buildContext, state) {
               if (state is CurrencyDetailInitial)
@@ -32,36 +32,92 @@ class CurrencyDetailScreen extends StatelessWidget {
                 return ErrorScreen(state.message);
               else {
                 Currency currency;
-                if(state is CurrencyBought) currency = state.currency;
-                if(state is NotEnoughMoney) currency = state.currency;
-                if(state is CurrencyDetailFetched) currency = state.currency;
-                if(state is CurrencyDetailLoading) currency = state.currency;
-                return Scaffold(
-                  appBar: AppBar(
-                    title: Text("${currency.name}"),
-                  ),
-                  body: Container(
-                    child: ListView(
-                      children: <Widget>[
-                        Container(
-                          color: Colors.black12,
-                          height: 450,
-                          child: CurrencyChart(currency)
-                        ),
-                        SizedBox(height: 15,),
-                        _buildItem("Oznaczenie:", "${currency.symbol}", Icons.monetization_on),
-                        SizedBox(height: 15,),
-                        _buildItem("Aktualny kurs:", "${currency.getCurrentExchangeRate().toStringAsFixed(3)}", Icons.equalizer),
-                        SizedBox(height: 15,),
-                        CurrencySlider(currency),
-                        SizedBox(height: 30,)
-                      ],
-                    ),
-                  ),
-                );
+                double amount;
+                if(state is CurrencyBought) {
+                  currency = state.currency;
+                  amount = state.amountOfPLN;
+                }
+                if(state is CurrencyDetailFetched){
+                  currency = state.currency;
+                  amount = state.amountOfPLN;
+                }
+                if(state is CurrencyDetailLoading){
+                  currency = state.currency;
+                  amount = state.amountOfPLN;
+                }
+                return buildScaffold(buildContext, currency, amount);
               }
             }
         )
+    );
+  }
+
+  Widget buildScaffold(BuildContext context, Currency currency, double amount){
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("${currency.name}"),
+      ),
+      body: Container(
+          child: RefreshIndicator(
+            onRefresh: (){
+              BlocProvider.of<CurrencyDetailBloc>(context).add(RefreshCurrencyDetail(currency, amount));
+              return Future.delayed(Duration(seconds: 0));
+            },
+            child: BlocListener<CurrencyDetailBloc, CurrencyDetailState>(
+              listener: (context, state){
+                if (state is CurrencyDetailLoading){
+                  Scaffold.of(context)
+                    ..removeCurrentSnackBar()
+                    ..showSnackBar(
+                        SnackBar(
+                          content: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Ładowanie...', style: TextStyle(color: Colors.white)),
+                              CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.cyanAccent))
+                            ],
+                          ),
+                          backgroundColor: Colors.black,
+                          duration: Duration(seconds: 5),
+                        ));
+                } else if(state is CurrencyBought){
+                  Scaffold.of(context)
+                    ..removeCurrentSnackBar()
+                    ..showSnackBar(
+                        SnackBar(
+                          content: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Zainwestowano', style: TextStyle(color: Colors.white)),
+                              Icon(Icons.check_circle)
+                            ],
+                          ),
+                          backgroundColor: Colors.green,
+                          duration: Duration(seconds: 3),
+                        ));
+                } else{
+                  Scaffold.of(context).hideCurrentSnackBar();
+                }
+              },
+              child: ListView(
+                children: <Widget>[
+                  Container(
+                      color: Colors.black12,
+                      height: 450,
+                      child: CurrencyChart(currency)
+                  ),
+                  SizedBox(height: 15,),
+                  _buildItem("Oznaczenie:", "${currency.symbol}", Icons.monetization_on),
+                  SizedBox(height: 15,),
+                  _buildItem("Aktualny kurs:", "${currency.getCurrentExchangeRate().toStringAsFixed(3)}", Icons.equalizer),
+                  SizedBox(height: 15,),
+                  CurrencySlider(currency, amount),
+                  SizedBox(height: 30,)
+                ],
+              ),
+            )
+          )
+      ),
     );
   }
 
