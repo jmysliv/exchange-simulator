@@ -47,6 +47,18 @@ class NotEnoughMoney extends CurrencyDetailState{
   String toString() => 'NotEnoughMoney:  $currency';
 }
 
+class CurrencyBought extends CurrencyDetailState{
+  final Currency currency;
+
+  CurrencyBought(this.currency);
+
+  @override
+  List<Object> get props => [currency];
+
+  @override
+  String toString() => 'CurrencyBught:  $currency';
+}
+
 class CurrencyDetailError extends CurrencyDetailState{
   final String message;
   CurrencyDetailError(this.message);

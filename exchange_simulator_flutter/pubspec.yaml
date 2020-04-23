@@ -25,6 +25,7 @@ dependencies:
   page_transition: ^1.1.5
   currency_icons: ^0.0.2
   intl: ^0.16.1
+  charts_flutter: ^0.9.0
   flutter:
     sdk: flutter
 

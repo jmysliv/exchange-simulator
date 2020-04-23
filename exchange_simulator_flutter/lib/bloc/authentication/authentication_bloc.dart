@@ -39,6 +39,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState>{
     } catch (e) {
       if(e is TimeoutException) yield ServerNotResponding();
       else{
+        await _userRepository.signOut();
         await Future.delayed(Duration(seconds: 3));
         yield Unauthenticated();
       }
@@ -58,6 +59,6 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState>{
 
   Stream<AuthenticationState> _mapLoggedOutToState() async* {
     yield Unauthenticated();
-    _userRepository.signOut();
+    await _userRepository.signOut();
   }
 }

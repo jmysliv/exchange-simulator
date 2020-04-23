@@ -20,6 +20,7 @@ class CurrencyDetailBloc extends Bloc<CurrencyDetailEvent, CurrencyDetailState> 
     if (event is InitCurrencyDetail) {
       try {
         Currency currency = await _currencyRepository.fetchCurrency(event.id).timeout(Duration(seconds: 5));
+        currency.timestamps.sort( (Timestamp a, Timestamp b) => a.date.compareTo(b.date));
         yield CurrencyDetailFetched(currency);
       } catch (exception) {
         if (exception is TimeoutException)
@@ -32,6 +33,7 @@ class CurrencyDetailBloc extends Bloc<CurrencyDetailEvent, CurrencyDetailState> 
       try {
         yield CurrencyDetailLoading(event.currency);
         Currency currency = await _currencyRepository.fetchCurrency(event.currency.id).timeout(Duration(seconds: 5));
+        currency.timestamps.sort( (Timestamp a, Timestamp b) => a.date.compareTo(b.date));
         yield CurrencyDetailFetched(currency);
       } catch (exception) {
         if (exception is TimeoutException)
@@ -46,7 +48,8 @@ class CurrencyDetailBloc extends Bloc<CurrencyDetailEvent, CurrencyDetailState> 
         yield CurrencyDetailLoading(event.currency);
         await _betRepository.buyCurrency(event.currency.id, event.amountInvestedPLN);
         Currency currency = await _currencyRepository.fetchCurrency(event.currency.id).timeout(Duration(seconds: 5));
-        yield CurrencyDetailFetched(currency);
+        currency.timestamps.sort( (Timestamp a, Timestamp b) => a.date.compareTo(b.date));
+        yield CurrencyBought(currency);
       } catch (exception) {
         if (exception is TimeoutException) yield  CurrencyDetailError("Ups, serwer na razie nie odpowiada. Przepraszamy za niedogodności, już pracujemy nad rozwiązaniem!");
         else if(exception is NotEnoughMoneyException) yield NotEnoughMoney(event.currency);
