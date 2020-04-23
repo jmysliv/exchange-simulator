@@ -2,7 +2,7 @@ import 'package:exchange_simulator_flutter/bloc/currency/currency.dart';
 import 'package:exchange_simulator_flutter/models/currency_model.dart';
 import 'package:exchange_simulator_flutter/repositories/currency_repository.dart';
 import 'package:exchange_simulator_flutter/repositories/user_repository.dart';
-import 'package:exchange_simulator_flutter/screens/currency_details_screen.dart';
+import 'package:exchange_simulator_flutter/screens/currency_details/currency_details_screen.dart';
 import 'package:exchange_simulator_flutter/screens/error_screen.dart';
 import 'package:exchange_simulator_flutter/screens/loading_screen.dart';
 import 'package:exchange_simulator_flutter/widgets/drawer.dart';
