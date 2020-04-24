@@ -89,7 +89,7 @@ class CurrencyDetailScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text('Zainwestowano', style: TextStyle(color: Colors.white)),
-                              Icon(Icons.check_circle)
+                              Icon(Icons.check_circle, color: Colors.white,)
                             ],
                           ),
                           backgroundColor: Colors.green,

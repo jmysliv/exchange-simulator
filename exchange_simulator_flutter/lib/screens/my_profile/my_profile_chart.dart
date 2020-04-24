@@ -64,31 +64,31 @@ class RenderTimestampInfo extends CircleSymbolRenderer {
   void paint(ChartCanvas canvas, Rectangle<num> bounds, {List<int> dashPattern, Color fillColor, FillPatternType fillPattern, Color strokeColor, double strokeWidthPx}) {
     super.paint(canvas, bounds, dashPattern: dashPattern, fillColor: fillColor, strokeColor: strokeColor, strokeWidthPx: strokeWidthPx, fillPattern: fillPattern);
     canvas.drawRect(
-        Rectangle(bounds.left - 45, bounds.top - 50, bounds.width + 80, bounds.height + 20),
+        Rectangle(bounds.left - 45, bounds.top - 35, bounds.width + 80, bounds.height + 20),
         fill: Color.fromHex( code: "#1f1f1f")
     );
     var textStyle = style.TextStyle();
     textStyle.color = Color.white;
     textStyle.fontSize = 8;
     canvas.drawText(
-        TextElement.TextElement("Kurs: ", style: textStyle),
+        TextElement.TextElement("Kwota: ", style: textStyle),
         (bounds.left - 30).round(),
-        (bounds.top - 46).round()
+        (bounds.top - 30).round()
     );
     canvas.drawText(
         TextElement.TextElement("${MyProfileChart.timestampPointer.amountOfPLN.toStringAsFixed(3)}", style: textStyle),
         (bounds.left - 5).round(),
-        (bounds.top - 46).round()
+        (bounds.top - 30).round()
     );
     canvas.drawText(
         TextElement.TextElement("Data: ", style: textStyle),
         (bounds.left - 30).round(),
-        (bounds.top - 36).round()
+        (bounds.top - 20).round()
     );
     canvas.drawText(
         TextElement.TextElement("${DateFormat.yMd().format(MyProfileChart.timestampPointer.date)}", style: textStyle),
         (bounds.left - 5).round(),
-        (bounds.top - 36).round()
+        (bounds.top - 20).round()
     );
   }
 }

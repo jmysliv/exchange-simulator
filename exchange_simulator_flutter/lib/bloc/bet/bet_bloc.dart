@@ -48,7 +48,7 @@ class BetBloc extends Bloc<BetEvent, BetState> {
       }
     } else if (event is SellBet) {
       try {
-        yield BetLoading(event.oldBets.where( (bet) => bet.id != event.betId).toList());
+        yield BetLoading(event.oldBets);
         await _betRepository.sellCurrency(event.betId);
         List<Bet> bets = await _betRepository.fetchBets().timeout(Duration(seconds: 5));
         calculatePotentialOutcome(bets);
