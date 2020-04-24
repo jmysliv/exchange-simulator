@@ -5,7 +5,7 @@ import 'package:exchange_simulator_flutter/screens/bet_screen.dart';
 import 'package:exchange_simulator_flutter/screens/currencies_screen.dart';
 import 'package:exchange_simulator_flutter/screens/home_screen.dart';
 import 'package:exchange_simulator_flutter/screens/login_screen.dart';
-import 'package:exchange_simulator_flutter/screens/myprofile_screen.dart';
+import 'package:exchange_simulator_flutter/screens/my_profile/myprofile_screen.dart';
 import 'package:exchange_simulator_flutter/screens/ranking_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';

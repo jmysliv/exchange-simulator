@@ -317,7 +317,7 @@ class _BetsListState extends State<BetsList>{
                 flex: 1,
                 child:  Column(
                   children: <Widget>[
-                    Text("${bet.potentialObtained} PLN",
+                    Text("${bet.potentialObtained.toStringAsFixed(2)} PLN",
                       style: TextStyle(color: Colors.white, fontSize: 15,), textAlign: TextAlign.center,),
                     Text("przy obecnym kursie",style: TextStyle(color: Colors.white, fontStyle: FontStyle.italic, fontSize: 8))
                   ],

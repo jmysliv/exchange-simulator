@@ -89,6 +89,7 @@ class CurrencySliderState extends State<CurrencySlider>{
       onPressed: (){
         if(_value > 0){
           BlocProvider.of<CurrencyDetailBloc>(context).add(BuyCurrency(widget.currency, _value, widget.amount));
+          _value = 0;
         }
       },
     );
