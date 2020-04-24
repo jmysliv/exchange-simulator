@@ -1,5 +1,7 @@
 import 'package:exchange_simulator_flutter/bloc/myProfile/myProfile.dart';
+import 'package:exchange_simulator_flutter/models/account_balance.dart';
 import 'package:exchange_simulator_flutter/models/user_model.dart';
+import 'package:exchange_simulator_flutter/repositories/bet_repository.dart';
 import 'package:exchange_simulator_flutter/repositories/user_repository.dart';
 import 'package:exchange_simulator_flutter/screens/error_screen.dart';
 import 'package:exchange_simulator_flutter/screens/loading_screen.dart';
@@ -14,7 +16,7 @@ class MyProfileScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return BlocProvider<MyProfileBloc>(
-      create: (context) => MyProfileBloc(UserRepository.getInstance())..add(InitMyProfile()),
+      create: (context) => MyProfileBloc(UserRepository.getInstance(), BetRepository(UserRepository.getInstance()))..add(InitMyProfile()),
       child: BlocBuilder<MyProfileBloc, MyProfileState>(
         builder: (context, state) {
           if (state is MyProfileInitial)
@@ -22,15 +24,14 @@ class MyProfileScreen extends StatelessWidget{
           else if (state is MyProfileError)
             return ErrorScreen(state.message);
           else {
-            return buildMyProfile(context, (state as MyProfileFetched).user);
+            return buildMyProfile(context, (state as MyProfileFetched).user, (state as MyProfileFetched).balance);
           }
         },
       ),
     );
   }
 
-  Widget buildMyProfile(BuildContext context, User user){
-    Size screenSize = MediaQuery.of(context).size;
+  Widget buildMyProfile(BuildContext context, User user, AccountBalance balance){
     return Scaffold(
       drawer: HomeDrawer(),
       appBar: AppBar(
@@ -38,12 +39,12 @@ class MyProfileScreen extends StatelessWidget{
       ),
       body: ListView(
         children: <Widget>[
-          _buildNameAndStatus(user.name, "Początkujący inwestor"),
+          _buildNameAndStatus(user.name, balance.userStatus()),
           _buildItem("Stan konta:", "${user.amountOfPLN}", Icons.account_balance_wallet),
           SizedBox(height: 15,),
           _buildItem("Email:", "${user.email}", Icons.email),
           SizedBox(height: 15,),
-          _buildItem("liczba inwestycji:", "2", Icons.show_chart),
+          _buildItem("liczba inwestycji:", "${balance.balanceTimestamps.length - 1}", Icons.show_chart),
           SizedBox(height: 15,),
         ],
       ),
@@ -98,9 +99,5 @@ class MyProfileScreen extends StatelessWidget{
         )
     );
   }
-
-
-
-
 
 }

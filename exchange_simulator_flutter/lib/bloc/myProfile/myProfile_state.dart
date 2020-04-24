@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:exchange_simulator_flutter/models/account_balance.dart';
 import 'package:exchange_simulator_flutter/models/user_model.dart';
 
 abstract class MyProfileState extends Equatable{
@@ -12,8 +13,9 @@ class MyProfileInitial extends MyProfileState{}
 
 class MyProfileFetched extends MyProfileState{
   final User user;
+  final AccountBalance balance;
 
-  MyProfileFetched(this.user);
+  MyProfileFetched(this.user, this.balance);
 
   @override
   List<Object> get props => [user];
