@@ -36,136 +36,70 @@ class MyProfileScreen extends StatelessWidget{
       appBar: AppBar(
         title: Text( 'Mój Profil' ),
       ),
-      body: Stack(
+      body: ListView(
         children: <Widget>[
-          _buildCoverImage(screenSize),
-          SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                SizedBox(height: screenSize.height / 2.6),
-                _buildName(user.name),
-                _buildEmail(context, user.email),
-                _buildStatContainer(user.amountOfPLN, 0), //to do when bet repository done, bedzie wykres zmiany stanu konta
-              ],
-            ),
-          ),
+          _buildNameAndStatus(user.name, "Początkujący inwestor"),
+          _buildItem("Stan konta:", "${user.amountOfPLN}", Icons.account_balance_wallet),
+          SizedBox(height: 15,),
+          _buildItem("Email:", "${user.email}", Icons.email),
+          SizedBox(height: 15,),
+          _buildItem("liczba inwestycji:", "2", Icons.show_chart),
+          SizedBox(height: 15,),
         ],
       ),
     );
   }
 
 
-  Widget _buildCoverImage(Size screenSize) {
-    return Container(
-      height: screenSize.height / 2.6,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/images/profile.jpg'),
-          fit: BoxFit.fill,
-        ),
-      ),
+  Widget _buildNameAndStatus(String name, String status) {
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+          child: Column(
+            children: <Widget>[
+              Text(name, style: TextStyle(fontSize: 28, foreground: Paint()
+                ..style = PaintingStyle.stroke
+                ..strokeWidth = 2
+                ..color = Colors.cyanAccent), textAlign: TextAlign.center,),
+              SizedBox(height: 5,),
+              Text(status, textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 10),)
+            ],
+          )
     );
   }
 
-  Widget _buildName(String name) {
-    TextStyle _nameTextStyle = TextStyle(
+  Widget _buildItem(String label, String count, IconData icon) {
+    TextStyle _statStyle = TextStyle(
       fontFamily: 'Roboto',
-      color: Colors.black,
-      fontSize: 28.0,
-      fontWeight: FontWeight.w700,
-    );
-
-    return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-        child: Text(
-          name,
-          style: _nameTextStyle,
-        ));
-  }
-
-  Widget _buildEmail(BuildContext context, String email) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 6.0),
-      decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
-        borderRadius: BorderRadius.circular(4.0),
-      ),
-      child: Text(
-        email,
-        style: TextStyle(
-          fontFamily: 'Spectral',
-          color: Colors.black,
-          fontSize: 20.0,
-          fontWeight: FontWeight.w300,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStatItem(String label, String count) {
-    TextStyle _statLabelTextStyle = TextStyle(
-      fontFamily: 'Roboto',
-      color: Colors.black,
-      fontSize: 10.0,
-      fontWeight: FontWeight.w200,
-    );
-    TextStyle _statCountTextStyle = TextStyle(
-      color: Colors.black54,
-      fontSize: 24.0,
+      color: Colors.white,
+      fontSize: 13.0,
       fontWeight: FontWeight.bold,
     );
-    return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              count,
-              style: _statCountTextStyle,
-            ),
-            Text(
+    return  Container(
+        decoration: BoxDecoration(
+          color: Colors.black12,),
+        child:Padding(
+          padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+          child: ListTile(
+            leading: Text(
               label,
-              style: _statLabelTextStyle,
+              style: _statStyle,
             ),
-          ],
+            title: Row(
+              children: <Widget>[
+                Icon(icon),
+                SizedBox(width: 10,),
+                Text(
+                  count,
+                  style: _statStyle,
+                ),
+              ],
+            ),
+          ),
         )
     );
   }
 
-  Widget _buildStatContainer(double amount, int numberOfBets) {
-    return Container(
-        height: 120.0,
-        margin: EdgeInsets.only(top: 8.0),
-        decoration: BoxDecoration(
-          color: Color(0xFFEFF4F7),
-        ),
-        child: Column(
-            children: <Widget>[
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Expanded(
-                      flex: 1,
-                      child: _buildStatItem("Liczba zakładów", "$numberOfBets"),
-                    ),
-                    Container(height: 54, child: VerticalDivider(color: Colors.black54, thickness: 1.0, indent: 8.0, endIndent: 1.0,)),
-                    Expanded(
-                      flex: 1,
-                      child: _buildStatItem("Zysk/strata", "${amount - 1000}"),
-                    )
-                  ]
-              ),
-              Divider(color: Colors.black54, thickness: 1.0, indent: 8.0, endIndent: 8.0,),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    _buildStatItem("Stan konta", "$amount"),
-                  ]
-              )
-            ]
-        )
-    );
-  }
+
 
 
 

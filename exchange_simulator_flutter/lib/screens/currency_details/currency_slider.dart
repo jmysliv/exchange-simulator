@@ -64,7 +64,7 @@ class CurrencySliderState extends State<CurrencySlider>{
                     },
                   );
                 },
-                divisions: (widget.amount.round() > 0) ? widget.amount.round() : 1,
+                divisions: (widget.amount.round() > 0) ? widget.amount.floor() : 1,
               ),
             ),
             Padding(

@@ -146,16 +146,17 @@ class HomeScreen extends StatelessWidget{
         title: Text("Home"),
       ),
       drawer: HomeDrawer(),
-      body: Container(
-        padding: const EdgeInsets.all(32.0),
-        child: Column(
+      body: ListView(
           children: <Widget>[
-            Image.asset("assets/images/logo_transparent.png", scale: 7,),
-            Text("Witaj w Currency Exchange Simulator! Interesujesz się giełdą, kursami walut i ekonomią, ale dotychczas bałeś się "
+            Image.asset("assets/images/logo_transparent.png", height: 250,),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 30),
+              child: Text("Witaj w Currency Exchange Simulator! Interesujesz się giełdą, kursami walut i ekonomią, ale dotychczas bałeś się "
                   "inwestować na giełdzie? Ta aplikacja jest dla Ciebie! Zobacz jak w 3 krokach stać sie giełdowym wyjadaczem!",
                 style: TextStyle(color: Colors.white, fontSize: 15), textAlign: TextAlign.center,),
+            ),
             Container(
-              padding: EdgeInsets.only(top: 30),
+              padding: EdgeInsets.symmetric(vertical: 30, horizontal: 40),
               alignment: FractionalOffset.bottomLeft,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -168,7 +169,6 @@ class HomeScreen extends StatelessWidget{
             ),
           ],
         )
-      )
     );
   }
 }
