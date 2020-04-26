@@ -5,7 +5,7 @@ import 'package:exchange_simulator_flutter/repositories/currency_repository.dart
 import 'package:exchange_simulator_flutter/repositories/user_repository.dart';
 import 'package:exchange_simulator_flutter/screens/currency_details/currency_chart.dart';
 import 'package:exchange_simulator_flutter/screens/currency_details/currency_slider.dart';
-import 'package:exchange_simulator_flutter/screens/error_screen.dart';
+import 'package:exchange_simulator_flutter/screens/splash/error_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

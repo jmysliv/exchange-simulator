@@ -2,11 +2,11 @@ import 'package:exchange_simulator_flutter/bloc/authentication/authentication.da
 import 'package:exchange_simulator_flutter/bloc_delegate.dart';
 import 'package:exchange_simulator_flutter/repositories/user_repository.dart';
 import 'package:exchange_simulator_flutter/screens/bets/bet_screen.dart';
-import 'package:exchange_simulator_flutter/screens/currencies_screen.dart';
-import 'package:exchange_simulator_flutter/screens/home_screen.dart';
-import 'package:exchange_simulator_flutter/screens/login_screen.dart';
+import 'package:exchange_simulator_flutter/screens/currency_list/currencies_screen.dart';
+import 'package:exchange_simulator_flutter/screens/home/home_screen.dart';
+import 'package:exchange_simulator_flutter/screens/login/login_screen.dart';
 import 'package:exchange_simulator_flutter/screens/my_profile/myprofile_screen.dart';
-import 'package:exchange_simulator_flutter/screens/ranking_screen.dart';
+import 'package:exchange_simulator_flutter/screens/ranking/ranking_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

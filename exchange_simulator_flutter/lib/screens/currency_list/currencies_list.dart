@@ -1,42 +1,8 @@
-import 'package:exchange_simulator_flutter/bloc/currency/currency.dart';
 import 'package:exchange_simulator_flutter/models/currency_model.dart';
-import 'package:exchange_simulator_flutter/repositories/currency_repository.dart';
-import 'package:exchange_simulator_flutter/repositories/user_repository.dart';
 import 'package:exchange_simulator_flutter/screens/currency_details/currency_details_screen.dart';
-import 'package:exchange_simulator_flutter/screens/error_screen.dart';
-import 'package:exchange_simulator_flutter/screens/loading_screen.dart';
 import 'package:exchange_simulator_flutter/widgets/drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
-
-class CurrenciesScreen extends StatelessWidget {
-  final CurrencyRepository _currencyRepository;
-
-  CurrenciesScreen() :
-        _currencyRepository = CurrencyRepository(UserRepository.getInstance());
-
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider<CurrencyBloc>(
-        create: (context) =>
-        CurrencyBloc(_currencyRepository)
-          ..add(InitCurrency()),
-        child: BlocBuilder<CurrencyBloc, CurrencyState>(
-            builder: (buildContext, state) {
-              if (state is CurrencyInitial)
-                return LoadingScreen("Ładowanie pieniędzy na serwer...");
-              else if (state is CurrencyError)
-                return ErrorScreen(state.message);
-              else {
-                return CurrenciesList((state as CurrencyFetched).currencies);
-              }
-            }
-        )
-    );
-  }
-}
 
 class CurrenciesList extends StatefulWidget {
   final List<Currency> currencies;
@@ -58,7 +24,7 @@ class _CurrenciesListState extends State<CurrenciesList>{
 
   @override
   void dispose() {
-   _searchController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -73,10 +39,10 @@ class _CurrenciesListState extends State<CurrenciesList>{
       ),
       style: TextStyle(color: Colors.white, fontSize: 16.0),
       onChanged: (searchPhrase) =>
-        setState(() {
-          if(searchPhrase == "") filteredCurrencies = widget.currencies;
-          else filteredCurrencies = widget.currencies.where((currency) => currency.name.toLowerCase().contains(searchPhrase.toLowerCase())).toList();
-        }),
+          setState(() {
+            if(searchPhrase == "") filteredCurrencies = widget.currencies;
+            else filteredCurrencies = widget.currencies.where((currency) => currency.name.toLowerCase().contains(searchPhrase.toLowerCase())).toList();
+          }),
     );
   }
 
@@ -106,7 +72,7 @@ class _CurrenciesListState extends State<CurrenciesList>{
           ModalRoute.of(context).addLocalHistoryEntry(LocalHistoryEntry(onRemove: () =>
               setState((){
                 _isSearching = false;
-             })
+              })
           ));
           setState(() {
             _isSearching = true;
@@ -120,9 +86,9 @@ class _CurrenciesListState extends State<CurrenciesList>{
   Widget build(BuildContext context){
     return Scaffold(
         appBar: AppBar(
-            leading: _isSearching ? const BackButton() : null,
-            title: _isSearching ? _searchField() : Text("Waluty"),
-            actions: _actions(),
+          leading: _isSearching ? const BackButton() : null,
+          title: _isSearching ? _searchField() : Text("Waluty"),
+          actions: _actions(),
         ),
         drawer: HomeDrawer(),
         body: Container(
@@ -149,7 +115,7 @@ class _CurrenciesListState extends State<CurrenciesList>{
         child:ListTile(
           contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
           leading: Image.asset('icons/currency/${currency.symbol.toLowerCase()}.png',
-                  package: 'currency_icons'),
+              package: 'currency_icons'),
           title: Text(
             currency.name,
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -165,5 +131,3 @@ class _CurrenciesListState extends State<CurrenciesList>{
     );
   }
 }
-
-

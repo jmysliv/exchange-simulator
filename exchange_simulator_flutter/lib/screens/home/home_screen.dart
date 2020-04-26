@@ -1,71 +1,21 @@
+import 'package:exchange_simulator_flutter/screens/home/photo_widget.dart';
 import 'package:exchange_simulator_flutter/widgets/drawer.dart';
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
-
-class Photo extends StatelessWidget {
-  Photo(this.photo, this.onTap);
-
-  final String photo;
-  final VoidCallback onTap;
-
-  Widget build(BuildContext context) {
-    return Material(
-      color: Theme.of(context).primaryColor.withOpacity(0.25),
-      child: InkWell(
-        onTap: onTap,
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints size) {
-            return Image.asset(
-              photo,
-              fit: BoxFit.contain,
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class RadialExpansion extends StatelessWidget {
-  RadialExpansion(this.maxRadius, this.child,) : clipRectSize = 2.0 * (maxRadius / math.sqrt2);
-
-  final double maxRadius;
-  final clipRectSize;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipOval(
-      child: Center(
-        child: SizedBox(
-          width: clipRectSize,
-          height: clipRectSize,
-          child: ClipRect(
-            child: child,
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class HomeScreen extends StatelessWidget{
-  static const double kMinRadius = 32.0;
-  static const double kMaxRadius = 128.0;
-  static const opacityCurve = const Interval(0.0, 0.7, curve: Curves.fastOutSlowIn);
+  static const double minRad = 32.0;
+  static const double maxRad = 128.0;
+  static const opacityCurve = const Interval(0.0, 0.5, curve: Curves.fastOutSlowIn);
   static const String step1 = "Analizuj jak zmieniają się kursy walut, próbuj przewidzieć które kursy będą rosły, a które spadały."
       " Na tej podstawie wybierz te w które zainwestujesz.";
   static const String step2 = "Po zainwestowaniu obserwuj jak zmieniają się kursy i czekaj. Staraj się wybrać najlepszy moment na sprzedaż, "
       "tak by twoje zyski były jak największe.";
   static const String step3 = "Sprzedawaj, zarabiaj i inwestuj znowu, aż dorobisz się fortuny i awansujesz w naszym rankingu! Jak już stwierdzisz, "
       "że masz odpowiedniego nosa do kursów, przenieś się na prawdziwą giełdę i zarabiaj prawdziwe pieniądze.";
-  static RectTween _createRectTween(Rect begin, Rect end) {
-    return MaterialRectCenterArcTween(begin: begin, end: end);
-  }
 
   static Widget _buildPage(BuildContext context, String imageName, String description) {
     return Container(
-      color: Theme.of(context).canvasColor,
+      color: Color.fromRGBO(10, 10, 10, 0.6),
       child: Center(
         child: Card(
           elevation: 10.0,
@@ -75,15 +25,16 @@ class HomeScreen extends StatelessWidget{
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(
-                  width: kMaxRadius * 2.0,
-                  height: kMaxRadius * 2.0,
+                  width: maxRad * 2.0,
+                  height: maxRad * 2.0,
                   child: Hero(
-                    createRectTween: _createRectTween,
+                    createRectTween:(Rect begin, Rect end) {
+                      return MaterialRectCenterArcTween(begin: begin, end: end);
+                    },
                     tag: imageName,
-                    child: RadialExpansion(kMaxRadius, Photo( imageName, () {
+                    child: OvalPhoto(maxRad, imageName, () {
                       Navigator.of(context).pop();
                     },
-                    ),
                     ),
                   ),
                 ),
@@ -101,26 +52,29 @@ class HomeScreen extends StatelessWidget{
     );
   }
 
-  Widget _buildHero(BuildContext context, String imageName, String description, String step) {
+  Widget _buildHero(BuildContext context, String imagePath, String description, String step) {
     return Column(
       children: <Widget>[
         Container(
-          width: kMinRadius * 2.0,
-          height: kMinRadius * 2.0,
+          width: minRad * 2.0,
+          height: minRad * 2.0,
           child: Hero(
-            createRectTween: _createRectTween,
-            tag: imageName,
-            child: RadialExpansion(kMaxRadius, Photo(imageName, () {
+            createRectTween: (Rect begin, Rect end) {
+              return MaterialRectCenterArcTween(begin: begin, end: end);
+            },
+            tag: imagePath,
+            child: OvalPhoto(maxRad, imagePath, () {
               Navigator.of(context).push(
                 PageRouteBuilder<void>(
                   transitionDuration: Duration(seconds: 1),
+                  opaque: false,
                   pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
                     return AnimatedBuilder(
                         animation: animation,
                         builder: (BuildContext context, Widget child) {
                           return Opacity(
                             opacity: opacityCurve.transform(animation.value),
-                            child: _buildPage(context, imageName, description),
+                            child: _buildPage(context, imagePath, description),
                           );
                         }
                     );
@@ -128,7 +82,6 @@ class HomeScreen extends StatelessWidget{
                 ),
               );
             },
-            ),
             ),
           ),
         ),
